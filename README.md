@@ -11,18 +11,26 @@ data. Each release has:
   the pinned Terraform and Genesys provider, and `install-windows.ps1`
 - `….zip.sha256` — its SHA-256 checksum
 
-Check a download before installing:
+**The full installation guide** — a Windows machine or server, and Azure Container Apps —
+is in the Admin App: **Backup › Backups › How to install the agent**.
+
+In short, for Windows: check the download (the two values must match; the file writes it in
+lower case),
 
 ```powershell
 (Get-FileHash .\genesys-backup-agent-<version>-windows-amd64.zip -Algorithm SHA256).Hash
+Get-Content .\genesys-backup-agent-<version>-windows-amd64.zip.sha256
 ```
 
-and compare it with the `.sha256` file. Then, in an elevated PowerShell in the unzipped folder:
+then, in an elevated PowerShell in the unzipped folder, with a registration code from
+**Backup › Backups › Add agent**:
 
 ```powershell
 .\install-windows.ps1 -App https://<admin app> -Code XXXX-XXXX-XXXX `
-  -Destination \fileserver\backups\genesys -Region mypurecloud.de -ClientId <backup client id>
+  -Destination "\\fileserver\backups\genesys" -Region mypurecloud.de -ClientId <Admin Tool OAuth client id>
 ```
 
-The registration code comes from **Backup › Backups › Add agent** in the Admin App.
+The client is the organisation's Admin Tool OAuth client — the same one the Admin App uses
+for it. The installer asks for its secret.
+
 The container image is `ghcr.io/xxmasterbeastxx/genesys-backup-agent`.
